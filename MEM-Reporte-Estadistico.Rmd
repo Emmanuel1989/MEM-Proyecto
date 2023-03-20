@@ -25,50 +25,7 @@ geometry: margin = 2.5cm
 ```{r setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(fig.pos = "!H", out.extra = "", echo = TRUE)
 #vignette('knit_print', package = 'knitr')
-as_latex = function(x, ...) {
-  UseMethod('as_latex', x)
-}
 
-# Define a class latex for LaTeX expressions
-as_latex.character = function(x) {
-  structure(
-    paste(x, collapse = ' '), 
-    class = c('latex', 'character')
-  )
-}
-
-# A character string of class latex is rendered in display mode
-# Define a knit_print() method for the latex class
-knit_print.latex = function(x, ...) {
-  knitr::asis_output(
-    paste0('$$', x, '$$')
-  )
-} 
-
-# Now, define a method as_latex for matrix
-as_latex.matrix = function(x, ...) {
-  as_latex(c(
-    '\\begin{bmatrix}',
-    paste(
-      t(x),
-      rep(c(rep('&', nrow(x) - 1), '\\\\'), ncol(x)),
-      collapse = ''
-    ),
-    '\\end{bmatrix}'
-  ))
-}
-
-# Indicate to knitr that matrix are rendered as latex
-knit_print.matrix = function(x, ...) {
-  knitr::knit_print(as_latex(x))
-}
-
-# Build a knitr inline hook to display inline latex in inline mode
-default_inline_hook = knitr::knit_hooks$get('inline')
-knitr::knit_hooks$set(inline = function(x) {
-  x = paste(gsub('\\$\\$', '$', x))
-  default_inline_hook(x)
-})
 library(ggplot2)
 library(corrplot)
 ```
@@ -94,33 +51,43 @@ El Análisis Factorial es, por tanto, una técnica de reducción de la dimension
 propósito último consiste en buscar el número mínimo de dimensiones capaces de explicar el máximo
 de información contenida en los datos.
 
-Para desarrollar el análisis de factores se realizaran pasos previos tales como estandarizar los datos , verificar si los datos cumplen la **normal multivariada**, revisar la matriz de correlaciones y realizar supuestos e hipotesis.
+Para desarrollar el análisis de factores se realizaran pasos previos tales como estandarizar los datos , verificar si los datos cumplen la **normal multivariada**, revisar la **matriz de correlaciones** y realizar **supuestos e hipotesis**.
 
 #### Paso 1: Carga de Datos
 
 
-```{r cargaInicialDatosFactores, echo= FALSE, warning=FALSE}
+```{r cargaInicialDatosFactores, echo=FALSE, warning=FALSE}
 library(readr)
-measures_v2 <- read_csv("measures_v2.csv")
-head(measures_v2)
+set.seed(1234)
+measures_v2 <- read_csv("measures_v2.csv", show_col_types = F)
+datos<- measures_v2[sample(nrow(measures_v2), 500, replace = FALSE), ]
+knitr::knit_print(measures_v2)
 ```
 #### Paso 2: Estandarizar datos
 
-```{r estandarizarDatosMeasure}
+```{r estandarizarDatosMeasure, echo=FALSE, warning=FALSE}
 standardize = function(x){
   z <- (x - mean(x)) / sd(x)
   return( z)
 }
 
-library(MVN)
-datos.estd <- apply(measures_v2,2, standardize)
+
+datos.estd <- apply(datos ,2, standardize)
 head(datos.estd)
 ```
 
 
 
 
+#### Paso 3: Revisar de cumplimiento de normal multivariada
 
+```{r NormalMultivaridaFactores, echo=FALSE, warning=F}
+library(MVN)
+mvn(datos.estd)
+```
+
+
+**Observaciones:** Se observa que ninguno de los datos cumplio con la prueba de normalidad dado su _p-valor_ es **0**, con respecto a las pruebas de **normalidad univariada** se observa que ninguna variable cumplio con normalidad.
 
 ## Conclusiones
 
