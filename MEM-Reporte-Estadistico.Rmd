@@ -11,8 +11,8 @@ output:
 documentclass: book
 classoption: a4paper,oneside
 title: "UNIVERSIDAD AUTÓNOMA DE NUEVO LEÓN \n &nbsp;  \n FACULTAD DE CIENCIAS FÍSICO MATEMÁTICAS \n &nbsp;  \n \n &nbsp;  \n  Maestria en Ciencia de Datos.  \n &nbsp;  \n Metodos Estadisticos Multivariados \n &nbsp;  \n Reporte Estadistico "
-author: "MET.Rosa Isela Hernández Zamora  \n &nbsp;  \nAlumno: Jesus Emmanuel Ramos Davila \n &nbsp;  \nMatricula: 1439401"
-date: "03/14/2023"
+author: "MET.Rosa Isela Hernández Zamora  \n &nbsp;  \nAlumnos: \n Jesus Emmanuel Ramos Davila  \n Marco Antonio Obregon Flores \n &nbsp;  \nMatricula: 1439401"
+date: "Fecha entrega: 03/28/2023"
 output:
   bookdown::html_document2: default
 bibliography: bibliography.bib
@@ -22,13 +22,105 @@ geometry: margin = 2.5cm
 
 ---
 
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(fig.pos = "!H", out.extra = "", echo = TRUE)
+#vignette('knit_print', package = 'knitr')
+as_latex = function(x, ...) {
+  UseMethod('as_latex', x)
+}
+
+# Define a class latex for LaTeX expressions
+as_latex.character = function(x) {
+  structure(
+    paste(x, collapse = ' '), 
+    class = c('latex', 'character')
+  )
+}
+
+# A character string of class latex is rendered in display mode
+# Define a knit_print() method for the latex class
+knit_print.latex = function(x, ...) {
+  knitr::asis_output(
+    paste0('$$', x, '$$')
+  )
+} 
+
+# Now, define a method as_latex for matrix
+as_latex.matrix = function(x, ...) {
+  as_latex(c(
+    '\\begin{bmatrix}',
+    paste(
+      t(x),
+      rep(c(rep('&', nrow(x) - 1), '\\\\'), ncol(x)),
+      collapse = ''
+    ),
+    '\\end{bmatrix}'
+  ))
+}
+
+# Indicate to knitr that matrix are rendered as latex
+knit_print.matrix = function(x, ...) {
+  knitr::knit_print(as_latex(x))
+}
+
+# Build a knitr inline hook to display inline latex in inline mode
+default_inline_hook = knitr::knit_hooks$get('inline')
+knitr::knit_hooks$set(inline = function(x) {
+  x = paste(gsub('\\$\\$', '$', x))
+  default_inline_hook(x)
+})
+library(ggplot2)
+library(corrplot)
+```
+
+
 ## Indice
 
 ## Introducción
 
 ## Análisis descriptivo del conjunto de datos
 
+
+
+
 ## Análisis de Componentes Principales/ Factores/ Discriminante/ Conglomerado
+
+
+
+
+### Análisis de Factores
+
+El Análisis Factorial es, por tanto, una técnica de reducción de la dimensionalidad de los datos. Su
+propósito último consiste en buscar el número mínimo de dimensiones capaces de explicar el máximo
+de información contenida en los datos.
+
+Para desarrollar el análisis de factores se realizaran pasos previos tales como estandarizar los datos , verificar si los datos cumplen la **normal multivariada**, revisar la matriz de correlaciones y realizar supuestos e hipotesis.
+
+#### Paso 1: Carga de Datos
+
+
+```{r cargaInicialDatosFactores, echo= FALSE, warning=FALSE}
+library(readr)
+measures_v2 <- read_csv("measures_v2.csv")
+head(measures_v2)
+```
+#### Paso 2: Estandarizar datos
+
+```{r estandarizarDatosMeasure}
+standardize = function(x){
+  z <- (x - mean(x)) / sd(x)
+  return( z)
+}
+
+library(MVN)
+datos.estd <- apply(measures_v2,2, standardize)
+head(datos.estd)
+```
+
+
+
+
+
 
 ## Conclusiones
 
