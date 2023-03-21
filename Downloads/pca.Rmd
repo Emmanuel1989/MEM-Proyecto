@@ -1,0 +1,51 @@
+---
+title: "PCA"
+output: pdf_document
+date: "2023-03-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+data_motor <- read.csv("measures_v2.csv")
+head(data_motor)
+```
+
+```{r}
+# Estandarizar los datos
+fn_std = function(x){
+  z <- (x - mean(x)) / sd(x)
+  return( z)
+}
+std_data <- apply(data_motor,2, fn_std)
+head(std_data)
+```
+
+```{r}
+library(dplyr)
+df <- as.data.frame(std_data) #convertir std_data a dataframe 
+df <- df %>% select(-profile_id) #eliminar la columna profile id
+```
+
+```{r}
+# Análisis de componentes principales
+pca1 <- prcomp(df, scale = TRUE)
+pca1
+
+# Obtenemos los componentes principales que explican más del 80% de la varianza
+suma1 <- cumsum(pca1$sdev^2 / sum(pca1$sdev^2))
+suma1
+num_componentes1 <- length(suma1[suma1 <= 0.82])
+num_componentes1
+componentes1 <- pca1$x[,1:num_componentes1]
+
+
+# Visualizamos los componentes principales
+head(componentes1)
+
+pca1$rotation[,1:3]
+```
