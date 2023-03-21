@@ -60,6 +60,7 @@ Para desarrollar el análisis de factores se realizaran pasos previos tales como
 library(readr)
 set.seed(1234)
 measures_v2 <- read_csv("measures_v2.csv", show_col_types = F)
+measures_v2 <- measures_v2[,1:12]
 datos<- measures_v2[sample(nrow(measures_v2), 500, replace = FALSE), ]
 knitr::knit_print(measures_v2)
 ```
@@ -81,13 +82,75 @@ head(datos.estd)
 
 #### Paso 3: Revisar de cumplimiento de normal multivariada
 
+Para este cumplimiento de normal multivarida creamos nuestras hipotesis
+
+
+
+\[H_0 : \mu_1 = \mu_2 = \mu_3 ... \mu_k \]
+\[H_1 : \mu_1 \neq \mu_2 ...  \neq \mu_k\]
+
 ```{r NormalMultivaridaFactores, echo=FALSE, warning=F}
 library(MVN)
-mvn(datos.estd)
+mvn.d <-mvn(datos.estd) 
+mvn.d$multivariateNormality
+```
+
+Para el cumplimiento de normal univariada creamos de igual manera nuestras hipotesis
+
+**Ho** : los datos provienen de una distribución normal. \
+
+**H1** : los datos provienen de otra distribución.
+
+
+```{r NormalUnivarida, echo=FALSE, warning=F}
+mvn.d$univariateNormality
+```
+**Observaciones:** Se observa que no se cumplio con la prueba de normal multivariada dado su _p-valor_ es **0**, re rechaza **Ho** los datos **no provienen de una normal multivariada**, con respecto a las pruebas de **normalidad univariada** se observa que ninguna variable cumplio con normalidad dados sus _p-valores_ cercanos al cero.
+
+
+#### Paso 4: Grafica de correlaciones
+
+
+```{r corPlotFactores, echo=F, warning=F}
+datos.cor <- round(cor(datos.estd, method = "pearson"), digits = 2)
+corrplot(datos.cor, method = "circle", addCoef.col = "blue", 
+         order = "original", type = "upper", number.cex = 0.5, tl.cex = 0.8)
 ```
 
 
-**Observaciones:** Se observa que ninguno de los datos cumplio con la prueba de normalidad dado su _p-valor_ es **0**, con respecto a las pruebas de **normalidad univariada** se observa que ninguna variable cumplio con normalidad.
+**Observaciones:** Se observa fuertes correlaciones tanto positivas como negativas, Las correlaciones mas notables mostradas en la grafica son:
+
+
+
+| Relacion | Coeficiente |
+| ------ | ------ |
+| coolant & stator_tooth | 0.67 |
+| stator_winding & stator_tooth | 0.97 |
+| stator_winding & i_d | -0.63  |
+| u_q & motor_speed | 0.62  |
+| u_d & i_q | -0.73  |
+| motor_speed & i_d | -0.71  |
+| stator_tooth & pm | 0.86  |
+| stator_winding & pm | 0.83  |
+| coolant & stator_yoke | 0.86  |
+| stator_winding & stator_yoke | 0.86  |
+| stator_tooth & stator_yoke | 0.95  |
+| pm & stator_yoke | 0.78  |
+| coolant & ambient | 0.59  |
+| stator_tooth & stator_yoke | 0.95 |
+| pm & ambient | 0.56 |
+| u_d & torque | -0.76 |
+| i_q & torque | 1 |
+
+
+
+**Observaciones:** Se observa una cantidad de fuertes correlaciones arriba de 0.70, tanto negativas como positiva.
+
+
+#### Paso 5: 
+
+
+
 
 ## Conclusiones
 
