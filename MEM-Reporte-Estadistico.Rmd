@@ -51,7 +51,7 @@ El Análisis Factorial es, por tanto, una técnica de reducción de la dimension
 propósito último consiste en buscar el número mínimo de dimensiones capaces de explicar el máximo
 de información contenida en los datos.
 
-Para desarrollar el análisis de factores se realizaran pasos previos tales como estandarizar los datos , verificar si los datos cumplen la **normal multivariada**, revisar la **matriz de correlaciones** y realizar **supuestos e hipotesis**.
+Para desarrollar el análisis de factores se realizaran pasos previos tales como estandarizar los datos , verificar si los datos cumplen la **normal multivariada**, revisar la **matriz de correlaciones** y realizar **supuestos e hipótesis**.
 
 #### Paso 1: Carga de Datos
 
@@ -82,7 +82,7 @@ head(datos.estd)
 
 #### Paso 3: Revisar de cumplimiento de normal multivariada
 
-Para este cumplimiento de normal multivarida creamos nuestras hipotesis
+Para este cumplimiento de normal multivarida creamos nuestras hipótesis
 
 
 
@@ -95,7 +95,7 @@ mvn.d <-mvn(datos.estd)
 mvn.d$multivariateNormality
 ```
 
-Para el cumplimiento de normal univariada creamos de igual manera nuestras hipotesis
+Para el cumplimiento de normal univariada creamos de igual manera nuestras hipótesis
 
 **Ho** : los datos provienen de una distribución normal. \
 
@@ -105,7 +105,7 @@ Para el cumplimiento de normal univariada creamos de igual manera nuestras hipot
 ```{r NormalUnivarida, echo=FALSE, warning=F}
 mvn.d$univariateNormality
 ```
-**Observaciones:** Se observa que no se cumplio con la prueba de normal multivariada dado su _p-valor_ es **0**, re rechaza **Ho** los datos **no provienen de una normal multivariada**, con respecto a las pruebas de **normalidad univariada** se observa que ninguna variable cumplio con normalidad dados sus _p-valores_ cercanos al cero.
+**Observaciones:** Se observa que no se cumplio con la prueba de normal multivariada dado su _p-valor_ es **0** menor a alfa **0.05**, re rechaza **Ho** los datos **no provienen de una normal multivariada**, con respecto a las pruebas de **normalidad univariada** se observa que ninguna variable cumplio con normalidad dados sus _p-valores_ cercanos al cero y menores a alfa **0.05** por lo tanto los datos siguen otro tipo de distribución.
 
 
 #### Paso 4: Grafica de correlaciones
@@ -147,9 +147,25 @@ corrplot(datos.cor, method = "circle", addCoef.col = "blue",
 **Observaciones:** Se observa una cantidad de fuertes correlaciones arriba de 0.70, tanto negativas como positiva.
 
 
-#### Paso 5: 
+#### Paso 5: Prueba de esfericidad
+
+Para esta prueba se usara la prueba de esfericidad de bartlett la cual sirve para identificar si la correlacion entre pares de variables es cero o no.
+
+Definimos nuestras hipótesis
+
+Ho: La correlación entre cada par de variables es cero
+H1: La correlación entre cada par de variable diferente de cero
 
 
+
+```{r bartlettFactores, warning=F, echo=F}
+library(psych)
+correlaciones <- corr.test(datos.estd)
+R <- as.matrix(correlaciones$r)
+cortest.bartlett(R, n=100)
+```
+
+**Observaciones:** Dado que el _p_valor_ es menor a alfa **0.05** , se rechaza Ho por lo tanto las correlaciones son diferente de 0.
 
 
 ## Conclusiones
