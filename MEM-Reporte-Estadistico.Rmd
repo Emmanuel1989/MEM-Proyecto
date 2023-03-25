@@ -11,7 +11,7 @@ output:
 documentclass: book
 classoption: a4paper,oneside
 title: "UNIVERSIDAD AUTÓNOMA DE NUEVO LEÓN \n &nbsp;  \n FACULTAD DE CIENCIAS FÍSICO MATEMÁTICAS \n &nbsp;  \n \n &nbsp;  \n  Maestria en Ciencia de Datos.  \n &nbsp;  \n Metodos Estadisticos Multivariados \n &nbsp;  \n Reporte Estadistico "
-author: "MET.Rosa Isela Hernández Zamora  \n &nbsp;  \nAlumnos: \n Jesus Emmanuel Ramos Davila  \n Marco Antonio Obregon Flores \n &nbsp;  \nMatricula: 1439401"
+author: "MET.Rosa Isela Hernández Zamora  \n &nbsp;  \nAlumnos: \n Jesus Emmanuel Ramos Davila  \n Marco Antonio Obregon Flores \n &nbsp;  \nMatricula: 1439401, \n 1723556 \n"
 date: "Fecha entrega: 03/28/2023"
 output:
   bookdown::html_document2: default
@@ -35,14 +35,55 @@ library(corrplot)
 
 ## Introducción
 
+
+El presente informe tiene como objetivo utilizar técnicas estadísticas multivariadas para analizar un conjunto de datos que contiene múltiples mediciones realizadas a un motor síncrono de imán permanente (PMSM). En específico, se utilizarán el análisis de componentes principales (PCA) y el análisis de factores para reducir la dimensionalidad del conjunto de datos y descubrir patrones y relaciones entre las variables. Estas técnicas se aplicarán en R Studio, utilizando los conocimientos adquiridos en el curso de Métodos Estadísticos Multivariados. El conjunto de datos contiene 13 variables distintas, incluyendo la temperatura del refrigerante del motor, la velocidad del motor, el par del motor y la corriente en el eje d del motor, entre otros. El análisis de componentes principales permitirá simplificar el conjunto de datos encontrando mezclas de variables que describen la mayor parte de la variación en los datos, mientras que el análisis de factores buscará reducir la dimensionalidad de los datos para explicar el máximo de información contenida en ellos. 
+
+El análisis del motor síncrono de imán permanente es importante para entender su funcionamiento y optimizar su rendimiento. El objetivo del análisis multivariado es identificar patrones y relaciones entre las variables, lo que puede llevar a descubrir factores importantes que afectan el rendimiento del motor.Al reducir la dimensionalidad de los datos mediante el uso de técnicas como el análisis de componentes principales y el análisis de factores, se puede obtener una mejor comprensión de la estructura subyacente de los datos y reducir la complejidad de la información. Esto puede permitir una mejor visualización de los patrones y relaciones, lo que puede conducir a una mejor identificación de los factores clave que afectan el rendimiento del motor. Además, la reducción de la dimensionalidad también puede ayudar a simplificar el análisis y mejorar la eficiencia del procesamiento de datos.
+
+Los datos utilizados en este análisis son reales y fueron obtenidos de Kirgiz, W. (2021). Electric Motor Temperature. Los datos se pueden encontrar en \url{https://www.kaggle.com/datasets/wkirgsn/electric-motor-temperature} y contienen mediciones realizadas a un motor síncrono de imán permanente (PMSM). Es importante destacar que no se eliminaron valores atípicos o faltantes en los datos.
+
+Además, se estandarizaron los datos antes de realizar el análisis, lo que significa que se convirtieron todas las variables a la misma escala para que tengan una media de cero y una desviación estándar de uno. Esto se hizo para que las variables se puedan comparar directamente entre sí y para evitar que una variable tenga más peso en el análisis solo porque tiene valores más grandes.
+
+En resumen, este informe utilizará técnicas estadísticas avanzadas para analizar un conjunto de datos complejo y encontrar patrones y relaciones entre las variables del motor síncrono de imán permanente.
+
 ## Análisis descriptivo del conjunto de datos
 
 
+Los registros corresponden a mediciones realizadas a un motor síncrono de imán permanente (PMSM), los cuales fueron muestreados a una frecuencia de 2 Hz. El conjunto de datos contiene múltiples sesiones de medición, las cuales se pueden distinguir por el identificador de perfil (profile\textunderscore id) y tienen una duración variable de entre una y seis horas. En total, se registraron 185 horas de operación del motor.
+
+El dataset utilizado en este análisis contiene un total de 1,330,816 mediciones realizadas al motor síncrono de imán permanente. Este es un conjunto de datos bastante grande que requiere técnicas estadísticas multivariadas avanzadas para su análisis y comprensión. La cantidad de mediciones en este conjunto de datos proporciona una gran cantidad de información sobre el comportamiento del motor, lo que puede ser útil para identificar patrones y relaciones complejas entre las variables y optimizar su rendimiento.
+
+\begin{table}[htbp]
+\centering
+\caption{Variables del conjunto de datos}
+\label{tab:variables}
+\begin{tabular}{c|c}
+\textbf{Variable} & \textbf{Descripción} \\ \hline
+\hline
+u\textunderscore q & Tensión en el eje q del motor \\ \hline
+coolant & Temperatura del refrigerante del motor \\ \hline
+stator\textunderscore winding & Temperatura del devanado del estator del motor \\ \hline
+u\textunderscore d & Tensión en el eje d del motor \\ \hline
+stator\textunderscore tooth & Temperatura del diente del estator del motor \\ \hline
+motor\textunderscore speed & Velocidad del motor \\ \hline
+i\textunderscore d & Corriente en el eje d del motor \\ \hline
+i\textunderscore q & Corriente en el eje q del motor \\ \hline
+pm & Temperatura del imán permanente del motor \\ \hline
+stator\textunderscore yoke & Temperatura del yugo del estator del motor \\ \hline
+ambient & Temperatura ambiente durante la medición \\ \hline
+torque & Par del motor \\ \hline
+profile\textunderscore id & Identificador de la sesión de medición \\ \hline
+\end{tabular}
+\end{table}
+
+Cabe destacar que el motor es excitado por ciclos de conducción diseñados a mano, que establecen una velocidad de referencia y un par de referencia. Las corrientes y voltajes en coordenadas d/q son resultado de una estrategia de control estándar que intenta seguir la velocidad y el par de referencia, y las variables de velocidad y torque son las cantidades resultantes logradas por esa estrategia, derivadas de las corrientes y voltajes establecidos. La mayoría de los ciclos de conducción corresponden a caminatas aleatorias en el plano velocidad-par, con el fin de imitar ciclos de conducción del mundo real de manera más precisa que las excitaciones y rampas de subida y bajada constantes.
 
 
-## Análisis de Componentes Principales/ Factores/ Discriminante/ Conglomerado
+### Análisis de Componentes Principales
 
+El análisis de componentes principales (PCA) es un método estadístico que sirve para simplificar y resumir un conjunto de datos con muchas variables. En vez de usar todas las variables originales, el PCA encuentra mezclas de estas variables que capturan la mayor parte de la variación en los datos. Estas mezclas se llaman “componentes principales” y se usan para describir el conjunto de datos de una manera más sencilla y comprensible.
 
+Piensa que tienes muchos datos distintos sobre un motor eléctrico, como la temperatura, el torque, la velocidad, etc. Puede ser complicado saber cómo todos estos datos se relacionan entre sí y qué información es la más relevante. Si el análisis de componentes principales descubre que la temperatura y el torque están muy relacionados, entonces puede juntarlos en un nuevo componente principal que abarque ambas variables a la vez. Así, se puede disminuir el número de variables y hacer que los datos sean más sencillos de entender.
 
 
 ### Análisis de Factores
@@ -219,4 +260,8 @@ Se concluye que aunque no se cumplieron los supuesto de normal multivariada dada
 ## Conclusiones
 
 ## Referencias
+
+Jolliffe, I. T. (2002). Principal component analysis. Springer.
+
+Kirgiz, W. (2021). Electric Motor Temperature. Recuperado el 10 de enero de 2023, de \url{https://www.kaggle.com/datasets/wkirgsn/electric-motor-temperature}
 
