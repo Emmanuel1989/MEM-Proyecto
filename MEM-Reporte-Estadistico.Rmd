@@ -300,6 +300,32 @@ corrplot(datos.cor, method = "circle", addCoef.col = "blue",
 **Observaciones:** Se observa una cantidad de fuertes correlaciones arriba de 0.70, tanto negativas como positivas. Una de las correlaciones más notorias es una correlación perfecta entre la variable **i_q y torque** las cual es de 1.
 
 
+#### Prueba de Normalidad
+
+Para esta sección haremos uso de la librería en R `nortest`, la cual aplicaremos para nuestra prueba de normalidad tanto univariada como multivariada.
+Aunque nuestros datos provienen de una muestra grande , la cual es considerada como n-p > 40 la cual se igual a  500 – 13  > 50 , se concluye muestra grande. Se aplicara  de igual manera la prueba de normal multivariada.
+
+
+```{r normMultiQQPLOT, echo=F, warning=F}
+library(MVN)
+library(nortest)
+mvn(datos, mvnTest = "royston", univariateTest = "CVM", univariatePlot = "histogram",
+multivariatePlot = "qq", multivariateOutlierMethod = "adj",
+showOutliers = TRUE, showNewData = TRUE)
+```
+
+Establecemos las hipótesis a considerar para normal multivariada y univariada.
+
+Ho: Los datos provienen de una normal multivariada H1: Los datos no provienen de una normal multivariada
+
+
+Ho: La variable proviene de una distribución normal, H1: La variable sigue otro tipo de distribución.
+
+
+
+
+
+
 ### Análisis de Componentes Principales
 
 El análisis de componentes principales (PCA) es un método estadístico que sirve para simplificar y resumir un conjunto de datos con muchas variables. En vez de usar todas las variables originales, el PCA encuentra mezclas de estas variables que capturan la mayor parte de la variación en los datos. Estas mezclas se llaman “componentes principales” y se usan para describir el conjunto de datos de una manera más sencilla y comprensible.
