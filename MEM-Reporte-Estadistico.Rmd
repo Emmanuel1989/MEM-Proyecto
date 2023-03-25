@@ -28,6 +28,11 @@ knitr::opts_chunk$set(fig.pos = "!H", out.extra = "", echo = TRUE)
 
 library(ggplot2)
 library(corrplot)
+library(readr)
+set.seed(1234)
+measures_v2 <- read_csv("measures_v2.csv", show_col_types = F)
+measures_v2 <- measures_v2[,1:12]
+datos<- measures_v2[sample(nrow(measures_v2), 500, replace = FALSE), ]
 ```
 
 
@@ -79,6 +84,222 @@ profile\textunderscore id & Identificador de la sesión de medición \\ \hline
 Cabe destacar que el motor es excitado por ciclos de conducción diseñados a mano, que establecen una velocidad de referencia y un par de referencia. Las corrientes y voltajes en coordenadas d/q son resultado de una estrategia de control estándar que intenta seguir la velocidad y el par de referencia, y las variables de velocidad y torque son las cantidades resultantes logradas por esa estrategia, derivadas de las corrientes y voltajes establecidos. La mayoría de los ciclos de conducción corresponden a caminatas aleatorias en el plano velocidad-par, con el fin de imitar ciclos de conducción del mundo real de manera más precisa que las excitaciones y rampas de subida y bajada constantes.
 
 
+### Análisis exploratorio
+
+En esta sección se analizarán los histogramas y boxplot de las variables, para esta sección se incluirán pruebas de normal univariada y multivariada así como grafica de correlación de pearson a fin de encontrar cuales variables se relacionan más con otras. Para esta y demás secciones se omitirá una de las variables mostradas de la sección anterior la cual es **profile_id** la cual no es una medición de nuestros datos y solo identifica la observación.
+
+
+#### Histogramas
+
+**Histograma u_q (Tensión en el eje q del motor)**
+
+```{r Hist_u_q, echo=F, warning=FALSE}
+hist(datos$u_q, main="Histograma de Tensión en el eje q del motor",ylab = "Frecuencia", xlab = "u_q",  ylim = c(0,80), xlim = c(-10,150))
+```
+
+**Observaciones:** _podemos observar que no se muestra una curva como una distribución de tipo normal, asemeja más a una distribución de tipo uniforme_
+
+
+
+**Histograma coolant (Temperatura del refrigerante del motor)**
+
+
+```{r Hist_coolant, echo=F, warning=FALSE}
+hist(datos$coolant, main="Histograma de temperatura del refrigerante del motor",ylab = "Frecuencia", xlab = "coolant",  ylim = c(0,250), xlim = c(0,110))
+```
+**Observaciones:** _podemos observar que no se muestra una curva como una distribución de tipo normal, asemeja más a una distribución de tipo exponencial_
+
+
+**Histograma stator_winding (Temperatura del devanado del estator del motor)**
+
+```{r Hist_stator_winding, echo=F, warning=FALSE}
+hist(datos$stator_winding, main="Histograma de temperatura del devanado del estator del motor",ylab = "Frecuencia", xlab = "stator_winding", ylim = c(0,70), xlim = c(0,150))
+```
+
+**Observaciones:** _Se observa en la grafica que esta variable podria seguir una distribucion de tipo normal, de cualquier manera se realizaran pruebas de normalidad univariada a fin de observar cual variable sigue una distribucion de tipo normal._
+
+
+**Histograma u_d (Tensión en el eje d del motor)**
+
+
+```{r Hist_u_d, echo=F, warning=FALSE}
+hist(datos$u_d, main="Histograma de Tensión en el eje d del motor",ylab = "Frecuencia", xlab = "u_d", ylim = c(0, 140))
+```
+
+
+**Observaciones:** _Podemos observar que no se muestra una curva como una distribución de tipo normal, se observa solo 2 barras con una gran cantidad de observaciones, se revisara en la sección de **vector de promedios** donde se ubican la media de los datos para esta variable._
+
+
+**Histograma stator_tooth (Temperatura del diente del estator del motor)**
+
+
+```{r Hist_stator_tooth, echo=F, warning=FALSE}
+hist(datos$stator_tooth, main="Histograma de temperatura del diente del estator del motor",ylab = "Frecuencia", xlab = "stator_tooth", ylim = c(0,100))
+```
+
+**Observaciones:** _Podemos observar que esta variable podría seguir una distribución de tipo normal dado los extremos y una forma un poco ligera de campana similar a la normal_
+
+
+
+**Histograma motor_speed (Velocidad del motor)**
+
+```{r Hist_motor_speed, echo=F, warning=FALSE}
+hist(datos$motor_speed, main="Histograma de Velocidad del motor",ylab = "Frecuencia", xlab = "motor_speed", xlim = c(0, 6500), ylim = c(0,100))
+```
+
+**Observaciones:** _Podemos observar que no se muestra una curva como una distribución de tipo normal_
+
+
+
+**Histograma i_d (Corriente en el eje d del motor)**
+
+```{r Hist_i_d, echo=F, warning=FALSE}
+hist(datos$i_d, main="Histograma de corriente en el eje d del motor",ylab = "Frecuencia", xlab = "i_d")
+```
+
+**Observaciones:** _Podemos observar que esta variable no sigue una distribución normal , se asemeja más a una distribución de tipo exponencial._
+
+
+
+**Histograma i_q (Corriente en el eje q del motor)**
+
+```{r Hist_i_q, echo=F, warning=FALSE}
+hist(datos$i_q, main="Histograma de corriente en el eje q del motor",ylab = "Frecuencia", xlab = "i_q")
+```
+
+
+**Observaciones:** _Podemos observar que esta variable no sigue una distribución normal._
+
+
+
+**Histograma pm (Temperatura del imán permanente del motor)**
+
+
+```{r Hist_pm, echo=F, warning=FALSE}
+hist(datos$pm, main="Histograma de temperatura del imán permanente del motor",ylab = "Frecuencia", xlab = "pm", ylim = c(0,120), xlim = c(0,130))
+```
+
+**Observaciones:** _Podemos observar que esta variable no sigue una distribución normal._
+
+
+**Histograma ambient (Temperatura ambiente durante la medición)**
+
+
+```{r Hist_ambient, echo=F, warning=FALSE}
+hist(datos$ambient, main="Histograma de temperatura ambiente durante la medición",ylab = "Frecuencia", xlab = "ambient")
+```
+
+**Observaciones:** _Podemos observar que esta variable podría seguir una distribución de tipo normal dado los extremos._
+
+
+
+**Histograma stator_yoke (Temperatura del yugo del estator del motor)**
+
+
+```{r Hist_stator_yoke, echo=F, warning=FALSE}
+hist(datos$stator_yoke, main="Histograma de temperatura del yugo del estator del motor",ylab = "Frecuencia", xlab = "stator_yoke")
+```
+
+**Observaciones:** _Podemos observar que esta variable podría seguir una distribución de tipo normal dado los extremos._
+
+
+
+**Histograma torque (Par del motor)**
+
+
+```{r Hist_torque, echo=F, warning=FALSE}
+hist(datos$torque, main="Histograma de par del motor",ylab = "Frecuencia", xlab = "torque")
+```
+**Observaciones:** _Podemos observar que esta variable podría seguir una distribución de tipo normal dado los extremos._
+
+
+
+
+#### Vector de Promedios
+
+Antes de realizar una estandarizacion de los datos , procederemos a obtener el vector de promedios de cada una de las variables
+
+\begin{table}[htbp]
+\centering
+\caption{Medias del conjunto de datos}
+\label{tab:variables}
+\begin{tabular}{c|c}
+\textbf{Variable} & \textbf{Promedio} \\ \hline
+\hline
+u\textunderscore q & 55.6 \\ \hline
+coolant & 35.5 \\ \hline
+stator\textunderscore winding & 64.7 \\ \hline
+u\textunderscore d & -27.5 \\ \hline
+stator\textunderscore tooth & 55.7 \\ \hline
+motor\textunderscore speed & 2254.6 \\ \hline
+i\textunderscore d & -69.5 \\ \hline
+i\textunderscore q & 40.3 \\ \hline
+pm & 57.8 \\ \hline
+stator\textunderscore yoke & 47.2 \\ \hline
+ambient & 24.5 \\ \hline
+torque & 33.4 \\ \hline
+\end{tabular}
+\end{table}
+
+
+**Observaciones:** _Se observa que la mayoría de los promedios de los datos se encuentran en un rango similar a excepción de la variable **motor_speed** la cual hace sentido ya que es la velocidad del motor._
+
+
+
+```{r vec_prom, echo=F, warning=F}
+x_bar <- sapply(datos, mean)
+
+```
+
+
+#### Matriz de Correlaciones
+
+
+```{r EstDatosGeneral, echo=F, warning=F}
+standardize = function(x){
+  z <- (x - mean(x)) / sd(x)
+  return( z)
+}
+
+datos.estd <- apply(datos ,2, standardize)
+```
+
+```{r corPlotFactores, echo=F, warning=F}
+datos.cor <- round(cor(datos.estd, method = "pearson"), digits = 2)
+corrplot(datos.cor, method = "circle", addCoef.col = "blue", 
+         order = "original", type = "upper", number.cex = 0.5, tl.cex = 0.8)
+```
+
+
+**Observaciones:** Se observa fuertes correlaciones tanto positivas como negativas, Las correlaciones mas notables mostradas en la grafica son:
+
+
+
+| Relacion | Coeficiente |
+| ------ | ------ |
+| coolant & stator_tooth | 0.67 |
+| stator_winding & stator_tooth | 0.97 |
+| stator_winding & i_d | -0.63  |
+| u_q & motor_speed | 0.62  |
+| u_d & i_q | -0.73  |
+| motor_speed & i_d | -0.71  |
+| stator_tooth & pm | 0.86  |
+| stator_winding & pm | 0.83  |
+| coolant & stator_yoke | 0.86  |
+| stator_winding & stator_yoke | 0.86  |
+| stator_tooth & stator_yoke | 0.95  |
+| pm & stator_yoke | 0.78  |
+| coolant & ambient | 0.59  |
+| stator_tooth & stator_yoke | 0.95 |
+| pm & ambient | 0.56 |
+| u_d & torque | -0.76 |
+| i_q & torque | 1 |
+
+
+
+**Observaciones:** Se observa una cantidad de fuertes correlaciones arriba de 0.70, tanto negativas como positivas. Una de las correlaciones más notorias es una correlación perfecta entre la variable **i_q y torque** las cual es de 1.
+
+
 ### Análisis de Componentes Principales
 
 El análisis de componentes principales (PCA) es un método estadístico que sirve para simplificar y resumir un conjunto de datos con muchas variables. En vez de usar todas las variables originales, el PCA encuentra mezclas de estas variables que capturan la mayor parte de la variación en los datos. Estas mezclas se llaman “componentes principales” y se usan para describir el conjunto de datos de una manera más sencilla y comprensible.
@@ -98,11 +319,7 @@ Para desarrollar el análisis de factores se realizaran pasos previos tales como
 
 
 ```{r cargaInicialDatosFactores, echo=FALSE, warning=FALSE}
-library(readr)
-set.seed(1234)
-measures_v2 <- read_csv("measures_v2.csv", show_col_types = F)
-measures_v2 <- measures_v2[,1:12]
-datos<- measures_v2[sample(nrow(measures_v2), 500, replace = FALSE), ]
+
 knitr::knit_print(measures_v2)
 ```
 #### Paso 2: Estandarizar datos
@@ -146,49 +363,16 @@ Para el cumplimiento de normal univariada creamos de igual manera nuestras hipó
 ```{r NormalUnivarida, echo=FALSE, warning=F}
 mvn.d$univariateNormality
 ```
-**Observaciones:** Se observa que no se cumplio con la prueba de normal multivariada dado su _p-valor_ es **0** menor a alfa **0.05**, re rechaza **Ho** los datos **no provienen de una normal multivariada**, con respecto a las pruebas de **normalidad univariada** se observa que ninguna variable cumplio con normalidad dados sus _p-valores_ cercanos al cero y menores a alfa **0.05** por lo tanto los datos siguen otro tipo de distribución.
-
-
-#### Paso 4: Grafica de correlaciones
-
-
-```{r corPlotFactores, echo=F, warning=F}
-datos.cor <- round(cor(datos.estd, method = "pearson"), digits = 2)
-corrplot(datos.cor, method = "circle", addCoef.col = "blue", 
-         order = "original", type = "upper", number.cex = 0.5, tl.cex = 0.8)
-```
-
-
-**Observaciones:** Se observa fuertes correlaciones tanto positivas como negativas, Las correlaciones mas notables mostradas en la grafica son:
+**Observaciones:** Se observa que no se cumplio con la prueba de normal multivariada dado su _p-valor_ es **0** menor a alfa **0.05**, re rechaza **Ho** los datos **no provienen de una normal multivariada**, con respecto a las pruebas de **normalidad univariada** se observa que **ninguna variable** cumplio con normalidad dados sus _p-valores_ cercanos al cero y menores a alfa **0.05** por lo tanto los datos siguen otro tipo de distribución.
 
 
 
-| Relacion | Coeficiente |
-| ------ | ------ |
-| coolant & stator_tooth | 0.67 |
-| stator_winding & stator_tooth | 0.97 |
-| stator_winding & i_d | -0.63  |
-| u_q & motor_speed | 0.62  |
-| u_d & i_q | -0.73  |
-| motor_speed & i_d | -0.71  |
-| stator_tooth & pm | 0.86  |
-| stator_winding & pm | 0.83  |
-| coolant & stator_yoke | 0.86  |
-| stator_winding & stator_yoke | 0.86  |
-| stator_tooth & stator_yoke | 0.95  |
-| pm & stator_yoke | 0.78  |
-| coolant & ambient | 0.59  |
-| stator_tooth & stator_yoke | 0.95 |
-| pm & ambient | 0.56 |
-| u_d & torque | -0.76 |
-| i_q & torque | 1 |
+**Matriz de Correlaciones**
+
+Análisis incluido en la sección `Análisis exploratorio` - _subsección: Matriz de Correlaciones_
 
 
-
-**Observaciones:** Se observa una cantidad de fuertes correlaciones arriba de 0.70, tanto negativas como positivas. Una de las correlaciones más notorias es una correlación perfecta entre la variable **i_q y torque** las cual es de 1.
-
-
-#### Paso 5: Prueba de esfericidad
+#### Paso 4: Prueba de esfericidad
 
 Para esta prueba se usara la prueba de esfericidad de bartlett la cual sirve para identificar si la correlación entre pares de variables es cero o no.
 
@@ -208,7 +392,7 @@ cortest.bartlett(R, n=100)
 
 **Observaciones:** Dado que el _p_valor_ es menor a alfa **0.05** , se rechaza Ho por lo tanto las correlaciones son diferente de 0.
 
-#### Paso 6: Determinar numero de factores
+#### Paso 5: Determinar numero de factores
 
 
 Para determinar el número de factores, procederemos a realizar un Análisis de Componentes Principales (PCA), el cual nos sugerirá el número de factores a considerar.
@@ -239,7 +423,7 @@ acp_fa
 - **Factor 3** : u_q,motor_speed,i_d,
 
 
-#### Paso 7: Representación gráfica
+#### Paso 6: Representación gráfica
 
 Representacion grafica de cada uno de las variables.
 
