@@ -311,7 +311,7 @@ library(MVN)
 library(nortest)
 mvn(datos, mvnTest = "royston", univariateTest = "CVM", univariatePlot = "histogram",
 multivariatePlot = "qq", multivariateOutlierMethod = "adj",
-showOutliers = TRUE, showNewData = TRUE)
+showOutliers = FALSE, showNewData = FALSE)
 ```
 
 Establecemos las hipótesis a considerar para normal multivariada y univariada.
@@ -322,6 +322,9 @@ Ho: Los datos provienen de una normal multivariada H1: Los datos no provienen de
 Ho: La variable proviene de una distribución normal, H1: La variable sigue otro tipo de distribución.
 
 
+**Observaciones:** Con respecto a la prueba de normal multivariada se establece que se rechaza Ho si p-valor (**0.00000000157**) es menor a alfa 0.05 por lo tanto se rechaza Ho, los datos **no provienen de una distribución normal multivariada**.
+Para las pruebas de normal univariada se establece que se rechaza Ho si p-valor es menor a alfa 0.05, Se rechaza Ho para todas las variables, **ninguna de las variables cumplió la normal univariada**.
+Por otra parte la grafica de outliers muestra la mayoría de los puntos como **outliers los cuales fueron 244/500** observaciones  los cuales son casi la mitad de las observaciones ,con respecto a la gráfica de QQplot se observa que las observaciones al inicio se ajustaron a la línea de la normal pero la mayoría de las observaciones no pudieron ajustarse a la línea.
 
 
 
