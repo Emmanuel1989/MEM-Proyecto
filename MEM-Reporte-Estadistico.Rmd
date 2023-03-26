@@ -460,7 +460,13 @@ Se concluye que aunque no se cumplieron los supuesto de normal multivariada dada
 
 - **Factor 1** : stator_winding, stator_tooth, pm, stator_yoke, coolant, ambient
 - **Factor 2** : u_d,i_q,torque
-- **Factor 3** : u_q,motor_speed,i_d,
+- **Factor 3** : u_q,motor_speed,i_d
+
+**Nota**: Dados las variables dominantes para cada factor daremos un nombre que haga sentido a los factores.
+
+- **Factor 1** : '**Componentes del motor**'
+- **Factor 2** : '**Variables eléctricas y de torque**'
+- **Factor 3** : '**Variables de velocidad y corriente directa**'
 
 ### Análisis de Componentes Principales
 
@@ -554,6 +560,19 @@ La segunda componente principal (PC2) está compuesta principalmente por las var
 La tercera componente principal (PC3) está compuesta principalmente por las variables coolant y motor_speed, lo que indica que estas variables están altamente correlacionadas entre sí. Esta componente principal puede representar la eficiencia de enfriamiento del motor.
 
 ## Conclusiones
+
+En esta seccion se detalla las conclusiones de cada una de las secciones principales , tanto del Analisis exploratorio como de los metodos aplicados (Analsis de Factores y PCA)
+
+
+### Análisis exploratorio.
+En este análisis se observaron que las variables sus histogramas  a manera de sospecha seguían una distribución de tipo normal, otras asemejaban otro tipo de distribución,  al realizar la prueba de normalidad tanto univarida como multivariada concluimos que las los datos no seguían una distribución normal multivariada y individualmente ninguna de las variables seguía una distribución de tipo normal dados sus p-valores para cada uno de las pruebas.
+Con respecto a la grafica de QQplot y de outliers se observo que las observaciones para QQplot no se ajustaban a la línea y la parte de los outliers la mitad de las observaciones de nuestro conjunto de datos se clasificaron como outliers.
+
+### Análisis de Factores
+En esta sección se reviso la matriz de correlaciones la cual se observaron correlación muy altas tanto positivas como negativas también se observaron variables independientes la cual su correlación entre variable fue 0,  Con respecto a la prueba de esfericidad se establecieron las hipótesis correspondientes y se aplico la prueba la cual se concluyo que las correlación entre las variables son diferentes de 0 dado su p-valor.
+Para la parte de el numero optimo de factores se aplico una grafica de codo la cual observamos que el numero optimo de factores se encontraba entre 3 y 4 factores, al aplicar el algoritmo de factores usando varimax para la rotación de vectores, se obtuvo una varianza explicada del **82%** la cual es un buen porcentaje, con respecto a los residuales RSMR los valores fueron muy bajos cercanos a 0, se mostraron comunalidades alta y varianza explicada muy baja.  **Concluimos para este método que pudimos reducir nuestro numero de variables de 12 a solo 3 variables manteniendo un porcentaje muy bueno de varianza explicada, se revisó de acuerdo a la variables dominantes de cada uno de los factores y se dieron nombres que dieran sentido a estas nuevas variables**.
+
+### Análisis de Componentes Principales
 
 
 
