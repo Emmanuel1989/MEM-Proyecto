@@ -276,26 +276,32 @@ corrplot(datos.cor, method = "circle", addCoef.col = "blue",
 
 
 
-| Relacion | Coeficiente |
-| ------ | ------ |
-| coolant & stator_tooth | 0.67 |
-| stator_winding & stator_tooth | 0.97 |
-| stator_winding & i_d | -0.63  |
-| u_q & motor_speed | 0.62  |
-| u_d & i_q | -0.73  |
-| motor_speed & i_d | -0.71  |
-| stator_tooth & pm | 0.86  |
-| stator_winding & pm | 0.83  |
-| coolant & stator_yoke | 0.86  |
-| stator_winding & stator_yoke | 0.86  |
-| stator_tooth & stator_yoke | 0.95  |
-| pm & stator_yoke | 0.78  |
-| coolant & ambient | 0.59  |
-| stator_tooth & stator_yoke | 0.95 |
-| pm & ambient | 0.56 |
-| u_d & torque | -0.76 |
-| i_q & torque | 1 |
-
+\begin{table}[htbp]
+\centering
+\caption{Variables con mayor correlacion}
+\label{tab:variables}
+\begin{tabular}{c|c}
+\textbf{Relacion} & \textbf{Coeficiente} \\ \hline
+\hline
+coolant - stator\textunderscore tooth & 0.67 \\ \hline
+stator\textunderscore winding - stator\textunderscore tooth & 0.97 \\ \hline
+stator\textunderscore winding - i\textunderscore d & -0.63 \\ \hline
+u\textunderscore q - motor\textunderscore speed & 0.62 \\ \hline
+u\textunderscore d - i\textunderscore q & -0.73 \\ \hline
+motor\textunderscore speed - i\textunderscore d & -0.71 \\ \hline
+stator\textunderscore tooth - pm & 0.86 \\ \hline
+stator\textunderscore winding - pm & 0.83 \\ \hline
+coolant - stator\textunderscore yoke  & 0.86 \\ \hline
+stator\textunderscore winding - stator\textunderscore yoke  & 0.86 \\ \hline
+stator\textunderscore tooth - stator\textunderscore yoke & 0.95 \\ \hline
+pm - stator\textunderscore yoke & 0.78 \\ \hline
+coolant - ambient & 0.59 \\ \hline
+stator\textunderscore tooth - stator\textunderscore yoke &  0.95 \\ \hline
+pm - ambient & 0.56\\ \hline
+u\textunderscore d - torque & -0.76 \\ \hline
+i\textunderscore q - torque & 1\\ \hline
+\end{tabular}
+\end{table}
 
 
 **Observaciones:** Se observa una cantidad de fuertes correlaciones arriba de 0.70, tanto negativas como positivas. Una de las correlaciones más notorias es una correlación perfecta entre la variable **i_q y torque** las cual es de 1.
@@ -416,29 +422,39 @@ cortest.bartlett(R, n=100)
 
 #### Paso 5: Determinar numero de factores
 
+##### Prueba de PCA
 
 Para determinar el número de factores, procederemos a realizar un Análisis de Componentes Principales (PCA), el cual nos sugerirá el número de factores a considerar.
 
+```{r PCAFactoresSinRotar, echo=F, warning=F, message=F}
+com_principales <- prcomp(datos.estd)
+summary(com_principales) # proporci?n de varianza explicada por cada componente
+```
+
+**Observaciones:** Se puede observar que el numero de factores optimo esta entre 3 y 4, Dada la varianza acumulada que contienen.
+
+
+##### Grafica de Codo
+
+Creamos nuestra grafica de codo la cual no sugiere de igual manera elegir entre 3 y 4 factores.
 
 ```{r NumeroFactorePCA, echo=F, warning=F}
 fa.parallel(R, fm = "pa", n.obs = 100, ylabel = "Eigenvalues")
 ```
 
-**Observaciones:** Se puede observar que el numero factores optimo esta entre 3 y 4, Procedemos a obtener un resumen del análisis PCA para revisar cuanta varianza explicada es la que se tiene cuando se toman 3 o 4 componentes.
 
 
-```{r PCAFactores, echo=F, warning=F}
-com_principales <- prcomp(datos.estd)
-summary(com_principales) 
-```
-**Observaciones:** Se puede observar que al elegir 3 factores obtenemos 82% de la varianza explicada, la cual es un buen porcentaje, Procedemos a usar el algoritmo ahora rotando los ejes usando el metodo de 'varimax'.
+**Observaciones:** Se puede observar que al elegir 3 factores obtenemos **82%** de la varianza explicada, la cual es un buen porcentaje, Procedemos a usar el algoritmo ahora rotando los ejes usando el metodo de 'varimax'.
+
+
+##### Factores usando Varimax
 
 ```{r PCAFactoresVarimax, echo=F, warning=F}
 acp_fa <- principal(R, nfactors = 3, rotate = "varimax")
 acp_fa
 ```
 
-**Observaciones:** Se observa una varianza acumulada del 83%, con respecto a los **residuales RSMR** se observa un valor muy bajo de **0.07** cercano a cero. Con respecto a las cargas elegidas estas muestran comunalidades (\[h_2\]) altas y la varianza no explicada \[u_2\] es muy baja. También observamos con el método de _varimax_ de una manera muy clara los **variables dominantes para cada factor** los cuales son:
+**Observaciones:** Se observa una varianza acumulada del **83%**, con respecto a los **residuales RSMR** se observa un valor muy bajo de **0.07** cercano a cero. Con respecto a las cargas elegidas estas muestran comunalidades (\[h_2\]) altas y la varianza no explicada \[u_2\] es muy baja. También observamos con el método de _varimax_ de una manera muy clara los **variables dominantes para cada factor** los cuales son:
 
 - **Factor 1** : stator_winding, stator_tooth, pm, stator_yoke, coolant, ambient
 - **Factor 2** : u_d,i_q,torque
