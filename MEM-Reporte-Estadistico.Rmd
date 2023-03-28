@@ -97,7 +97,7 @@ En esta sección se analizarán los histogramas y boxplot de las variables, para
 hist(datos$u_q, main="Histograma de Tensión en el eje q del motor",ylab = "Frecuencia", xlab = "u_q",  ylim = c(0,80), xlim = c(-10,150))
 ```
 
-**Observaciones:** _podemos observar que no se muestra una curva como una distribución de tipo normal, asemeja más a una distribución de tipo uniforme_
+**Observaciones:** _podemos observar que no se muestra una curva como una distribución de tipo normal, asemeja más a una distribución de tipo uniforme._
 
 
 
@@ -107,7 +107,7 @@ hist(datos$u_q, main="Histograma de Tensión en el eje q del motor",ylab = "Frec
 ```{r Hist_coolant, echo=F, warning=FALSE}
 hist(datos$coolant, main="Histograma de temperatura del refrigerante del motor",ylab = "Frecuencia", xlab = "coolant",  ylim = c(0,250), xlim = c(0,110))
 ```
-**Observaciones:** _podemos observar que no se muestra una curva como una distribución de tipo normal, asemeja más a una distribución de tipo exponencial_
+**Observaciones:** _podemos observar que no se muestra una curva como una distribución de tipo normal, asemeja más a una distribución de tipo exponencial._
 
 
 **Histograma stator_winding (Temperatura del devanado del estator del motor)**
@@ -137,7 +137,7 @@ hist(datos$u_d, main="Histograma de Tensión en el eje d del motor",ylab = "Frec
 hist(datos$stator_tooth, main="Histograma de temperatura del diente del estator del motor",ylab = "Frecuencia", xlab = "stator_tooth", ylim = c(0,100))
 ```
 
-**Observaciones:** _Podemos observar que esta variable podría seguir una distribución de tipo normal dado los extremos y una forma un poco ligera de campana similar a la normal_
+**Observaciones:** _Podemos observar que esta variable podría seguir una distribución de tipo normal dado los extremos y una forma un poco ligera de campana similar a la normal._
 
 
 
@@ -148,7 +148,7 @@ hist(datos$motor_speed, main="Histograma de Velocidad del motor",ylab = "Frecuen
 ```
 
 
-**Observaciones:** _Podemos observar que no se muestra una curva como una distribución de tipo normal_
+**Observaciones:** _Podemos observar que no se muestra una curva como una distribución de tipo normal._
 
 
 
@@ -272,7 +272,7 @@ corrplot(datos.cor, method = "circle", addCoef.col = "blue",
 ```
 
 
-**Observaciones:** Se observa fuertes correlaciones tanto positivas como negativas, Las correlaciones mas notables mostradas en la grafica son:
+**Observaciones:** Se observa fuertes correlaciones tanto positivas como negativas. Las correlaciones mas notables mostradas en la gráfica son:
 
 
 
@@ -310,7 +310,7 @@ i\textunderscore q - torque & 1\\ \hline
 #### Prueba de Normalidad
 
 Para esta sección haremos uso de la librería en R `nortest`, la cual aplicaremos para nuestra prueba de normalidad tanto univariada como multivariada.
-Aunque nuestros datos provienen de una muestra grande , la cual es considerada como n-p > 40 la cual se igual a  500 – 13  > 50 , se concluye muestra grande. Se aplicara  de igual manera la prueba de normal multivariada.
+Aunque nuestros datos provienen de una muestra grande, la cual es considerada como n-p > 40 la cual se igual a  500 – 13  > 50 , se concluye muestra grande. Se aplicara  de igual manera la prueba de normal multivariada.
 
 
 ```{r normMultiQQPLOT, echo=F, warning=F}
@@ -323,7 +323,7 @@ showOutliers = FALSE, showNewData = FALSE)
 
 Establecemos las hipótesis a considerar para normal multivariada y univariada.
 
-Ho: Los datos provienen de una normal multivariada H1: Los datos no provienen de una normal multivariada
+Ho: Los datos provienen de una normal multivariada H1: Los datos no provienen de una normal multivariada.
 
 
 Ho: La variable proviene de una distribución normal, H1: La variable sigue otro tipo de distribución.
@@ -341,7 +341,7 @@ El Análisis Factorial es, por tanto, una técnica de reducción de la dimension
 propósito último consiste en buscar el número mínimo de dimensiones capaces de explicar el máximo
 de información contenida en los datos.
 
-Para desarrollar el análisis de factores se realizaran pasos previos tales como estandarizar los datos , verificar si los datos cumplen la **normal multivariada**, revisar la **matriz de correlaciones** y realizar **supuestos e hipótesis**.
+Para desarrollar el análisis de factores se realizaran pasos previos tales como estandarizar los datos, verificar si los datos cumplen la **normal multivariada**, revisar la **matriz de correlaciones** y realizar **supuestos e hipótesis**.
 
 #### Paso 1: Carga de Datos
 
@@ -368,7 +368,7 @@ head(datos.estd)
 
 #### Paso 3: Revisar de cumplimiento de normal multivariada
 
-Para este cumplimiento de normal multivarida creamos nuestras hipótesis
+Para este cumplimiento de normal multivarida creamos nuestras hipótesis:
 
 
 
@@ -381,7 +381,7 @@ mvn.d <-mvn(datos.estd)
 mvn.d$multivariateNormality
 ```
 
-Para el cumplimiento de normal univariada creamos de igual manera nuestras hipótesis
+Para el cumplimiento de normal univariada creamos de igual manera nuestras hipótesis:
 
 **Ho** : los datos provienen de una distribución normal. \
 
@@ -402,7 +402,7 @@ Análisis incluido en la sección `Análisis exploratorio` - _subsección: Matri
 
 #### Paso 4: Prueba de esfericidad
 
-Para esta prueba se usara la prueba de esfericidad de bartlett la cual sirve para identificar si la correlación entre pares de variables es cero o no.
+Para esta prueba se usara la prueba de esfericidad de Bartlett la cual sirve para identificar si la correlación entre pares de variables es cero o no.
 
 Definimos nuestras hipótesis
 
@@ -431,12 +431,12 @@ com_principales <- prcomp(datos.estd)
 summary(com_principales) # proporci?n de varianza explicada por cada componente
 ```
 
-**Observaciones:** Se puede observar que el numero de factores optimo esta entre 3 y 4, Dada la varianza acumulada que contienen.
+**Observaciones:** Se puede observar que el número de factores óptimo esta entre 3 y 4, dada la varianza acumulada que contienen.
 
 
 ##### Grafica de Codo
 
-Creamos nuestra grafica de codo la cual no sugiere de igual manera elegir entre 3 y 4 factores.
+Creamos nuestra gráfica de codo la cual no sugiere de igual manera elegir entre 3 y 4 factores.
 
 ```{r NumeroFactorePCA, echo=F, warning=F}
 fa.parallel(R, fm = "pa", n.obs = 100, ylabel = "Eigenvalues")
@@ -444,7 +444,7 @@ fa.parallel(R, fm = "pa", n.obs = 100, ylabel = "Eigenvalues")
 
 
 
-**Observaciones:** Se puede observar que al elegir 3 factores obtenemos **82%** de la varianza explicada, la cual es un buen porcentaje, Procedemos a usar el algoritmo ahora rotando los ejes usando el metodo de 'varimax'.
+**Observaciones:** Se puede observar que al elegir 3 factores obtenemos **82%** de la varianza explicada, la cual es un buen porcentaje, Procedemos a usar el algoritmo ahora rotando los ejes usando el método de 'varimax'.
 
 
 ##### Factores usando Varimax
@@ -463,7 +463,7 @@ acp_fa
 
 #### Paso 6: Representación gráfica
 
-Representacion grafica de cada uno de las variables.
+Representación grafica de cada uno de las variables.
 
 ```{r PCAGrafFactores, echo=F, warning=F}
 plot(acp_fa, labels = row.names(R))
@@ -520,7 +520,8 @@ df_std_PCA <- apply(df_PCA,2, fn_std)
 head(df_std_PCA)
 
 ```
-De igual manera se validan las dimensiones del dataset.
+
+De igual manera se validan las dimensiones del dataset con dim().
 
 ```{r, echo = FALSE, warning=F}
   dim_table <- as.data.frame(t(dim(df_std_PCA)))
@@ -538,9 +539,21 @@ pca1 <- prcomp(df_std_PCA, scale = FALSE)
 pca1
 ```
 
-Las desviaciones estándar (standard deviations) indican la variabilidad de los datos originales en cada una de las 12 dimensiones consideradas. La primera dimensión tiene la mayor variabilidad, con una desviación estándar de 2.206, mientras que la última dimensión tiene la menor variabilidad, con una desviación estándar de 0.025.
+Estas desviaciones estándar indican cuánto varían los datos proyectados en cada componente principal. A mayor desviación estándar, mayor variación y mayor importancia del componente principal.
 
-La matriz de rotación (rotation) muestra las cargas de cada variable en cada una de las 12 componentes principales resultantes del PCA. Las cargas indican cuánto contribuye cada variable a cada componente principal y en qué dirección. Por ejemplo, la variable "u_q" tiene una carga positiva en la primera componente principal y una carga negativa en la cuarta componente principal.
+Se puede observar que el primer componente principal tiene la mayor desviación estándar (2.2), lo que significa que explica la mayor parte de la variación de los datos originales. El segundo componente principal tiene la segunda mayor desviación estándar (1.77), lo que significa que explica la mayor parte de la variación que queda después de quitar el efecto del primero. Y así sucesivamente con los demás componentes principales.
+
+Se puede ver también que las desviaciones estándar van disminuyendo a medida que aumenta el número de componente principal, lo que significa que cada componente principal explica menos variación que el anterior. Los últimos componentes principales tienen desviaciones estándar muy pequeñas (menores a 0.1), lo que significa que explican muy poca variación de los datos y que podrían ser ignorados sin perder mucha información.
+
+Sobre los resultados de la matriz de rotación y los coeficientes de los componentes principales obtenidos por el PCA, la matriz de rotación es una matriz que contiene los vectores propios de los datos, es decir, las direcciones en las que los datos varían más. Cada fila de la matriz representa un vector propio y cada columna representa una coordenada del vector. Los coeficientes de los componentes principales son los números que indican cómo se combinan las variables originales para formar cada componente principal. Cada fila de la tabla representa una variable original y cada columna representa un componente principal.
+
+Los números pueden ser positivos o negativos. Los números positivos indican que la variable original y el primer componente principal se mueven en la misma dirección. Por ejemplo, si la variable coolant aumenta, el primer componente principal también aumenta. Los números negativos indican que la variable original y el primer componente principal se mueven en direcciones opuestas. Por ejemplo, si la variable u_d aumenta, el primer componente principal disminuye.
+
+Los números grandes indican que la variable original tiene mucha influencia en el primer componente principal. Por ejemplo, la variable stator_yoke tiene el número más grande (0.42185478), lo que significa que es la que más contribuye a la diferencia entre los datos. Los números pequeños indican que la variable original tiene poca influencia en el primer componente principal. Por ejemplo, la variable torque tiene el número más pequeño (-0.05489022), lo que significa que es la que menos contribuye a la diferencia entre los datos.
+
+El primer componente principal es importante porque explica la mayor parte de la diferencia entre los datos. 
+El doceavo componente principal es el último que se puede hacer con las variables originales. Es el que explica la menor parte de la diferencia entre los datos
+
 
 #### Paso 4: Selección de componentes principales
 
@@ -554,16 +567,12 @@ num_componentes1 <- length(suma1[suma1 <= 0.82])
 
 
 ```
+
+\newpage
+
 #### Paso 5: Visualización de componentes principales
 
-Finalmente, se muestran los primeros registros de los componentes principales utilizando la función head. Además, se utiliza la función pca1$rotation para obtener la matriz de rotación, que contiene las cargas de cada variable en cada componente principal, y se muestran los primeros 3 componentes principales y sus respectivas cargas.
-
-```{r, echo=FALSE, warning=F}
-# Visualizamos los componentes principales
-componentes1 <- pca1$x[,1:num_componentes1]
-kable(head(componentes1), caption = "Tabla de las primeras 6 observaciones de las componentes principales")
-
-```
+Finalmente, se utiliza la función pca1$rotation para obtener la matriz de rotación, que contiene las cargas de cada variable en cada componente principal, y se muestran los primeros 3 componentes principales y sus respectivas cargas.
 
 ```{r, echo=FALSE, warning=F}
 kable(pca1$rotation[,1:3], caption = "Tabla de componentes principales")
@@ -571,15 +580,17 @@ kable(pca1$rotation[,1:3], caption = "Tabla de componentes principales")
 
 Los valores en la tabla indican cómo cada variable contribuye a cada una de las tres componentes principales.
 
-La primera componente principal (PC1) está compuesta principalmente por las variables stator_yoke, stator_tooth, stator_winding y pm, lo que indica que estas variables están altamente correlacionadas entre sí. Esta componente principal puede representar la cantidad de energía eléctrica que se está generando en el motor.
+El primer componente principal tiene valores grandes en las variables coolant, stator_winding, stator_tooth, i_d, pm y stator_yoke. Esto significa que estas variables contribuyen mucho a la diferencia entre los datos en la dirección del primer componente principal y que están correlacionadas entre sí. Podríamos interpretar este componente principal como un factor relacionado con la temperatura del motor.
 
-La segunda componente principal (PC2) está compuesta principalmente por las variables torque, i_q e i_d, lo que indica que estas variables también están altamente correlacionadas entre sí. Esta componente principal puede representar la carga mecánica en el motor.
+El segundo componente principal tiene valores grandes en las variables u_d, i_q y torque. Esto significa que estas variables contribuyen mucho a la diferencia entre los datos en la dirección del segundo componente principal y que están correlacionadas entre sí. Podríamos interpretar este componente principal como un factor relacionado con la potencia del motor.
 
-La tercera componente principal (PC3) está compuesta principalmente por las variables coolant y motor_speed, lo que indica que estas variables están altamente correlacionadas entre sí. Esta componente principal puede representar la eficiencia de enfriamiento del motor.
+El tercer componente principal tiene valores grandes en las variables u_q y motor_speed. Esto significa que estas variables contribuyen mucho a la diferencia entre los datos en la dirección del tercer componente principal y que están correlacionadas entre sí. Podríamos interpretar este componente principal como un factor relacionado con la velocidad del motor.
+
+\newpage
 
 ## Conclusiones
 
-En esta seccion se detalla las conclusiones de cada una de las secciones principales , tanto del Analisis exploratorio como de los metodos aplicados (Analsis de Factores y PCA)
+En esta sección se detalla las conclusiones de cada una de las secciones principales , tanto del Análisis exploratorio como de los métodos aplicados (Análisis de Factores y PCA)
 
 
 ### Análisis exploratorio.
@@ -592,15 +603,36 @@ Para la parte de el numero optimo de factores se aplico una grafica de codo la c
 
 ### Análisis de Componentes Principales
 
-Después de realizar el análisis de componentes principales en el dataset del motor eléctrico, podemos concluir que esta técnica estadística nos ha permitido identificar las variables más importantes que explican la variabilidad de los datos. Además, hemos podido observar que las variables del dataset están altamente correlacionadas entre sí, lo que sugiere la presencia de multicolinealidad.
+Los resultados obtenidos con el PCA nos pueden servir para realizar una investigación más avanzada o aplicar modelos no paramétricos o de deep learning al conjunto de datos. Al reducir el número de variables de 12 a 3, podemos disminuir la complejidad y el tiempo de cómputo de los modelos, así como evitar el sobreajuste o la maldición de la dimensionalidad. Además, al tener variables más simples y significativas, podemos facilitar la interpretación y la visualización de los resultados.
 
-En este sentido, el análisis de componentes principales ha sido útil para reducir la dimensionalidad del dataset, al combinar las variables en tres componentes principales que representan la cantidad de energía eléctrica generada, la carga mecánica en el motor y la eficiencia de enfriamiento.
+Por ejemplo, podríamos usar los tres componentes principales como variables predictoras en un modelo no paramétrico como un árbol de decisión o un bosque aleatorio para predecir el consumo eléctrico del motor en función de las características del mismo. O podríamos usar los tres componentes principales como variables de entrada en un modelo de deep learning como una red neuronal artificial o una red convolucional para clasificar el tipo o el estado del motor según su consumo eléctrico.
 
-Asimismo, durante el proceso de análisis de componentes principales, hemos utilizado la técnica de normalización de los datos, lo que ha permitido comparar las variables en una misma escala. También hemos evaluado la varianza explicada por cada componente principal y hemos utilizado el criterio de Kaiser para seleccionar el número de componentes principales a retener.
+\newpage
 
 ## Referencias
 
 - Jolliffe, I. T. (2002). Principal component analysis. Springer.
 
+- Abdi, H., & Williams, L. J. (2010). Principal component analysis. Wiley Interdisciplinary Reviews: Computational Statistics, 2(4), 433–459. https://doi.org/10.1002/wics.101
+
+- Jun Li and Thangarajah Akilan. Global attention-based encoder-decoder
+lstm model for temperature prediction of permanent magnet synchronous
+motors. IEEE, 11, 2022.
+
 - Kirgiz, W. (2021). Electric Motor Temperature. Recuperado el 10 de enero de 2023, de \url{https://www.kaggle.com/datasets/wkirgsn/electric-motor-temperature}
+
+- Wickham, H., & Grolemund, G. (2016). R for data science: Import, tidy, transform, visualize, and model data. O’Reilly Media.
+
+- Kassambara, A. (2017). QQ-plots: Quantile-Quantile plots - R Base Graphs. STHDA. http://sthda.com/english/wiki/qq-plots-quantile-quantile-plots-r-base-graphs
+
+- Lever, J., Krzywinski, M., & Altman, N. (2017). Principal component analysis. Nature Methods, 14(7), 641–642. https://doi.org/10.1038/nmeth.4346
+
+- Revelle, W. (2018). How to: Use the psych package for factor analysis and data reduction. https://cran.r-project.org/web/packages/psychTools/vignettes/factor.pdf
+
+- Kassambara, A. (2019). Mauchly’s test of sphericity in R: The definitive guide. Datanovia. https://www.datanovia.com/en/lessons/mauchlys-test-of-sphericity-in-r/
+
+- Statology. (2019). A guide to Bartlett’s test of sphericity. https://www.statology.org/bartletts-test-of-sphericity/
+
+- Singmann, H., Bolker, B., Westfall, J., & Aust, F. (2020). afex: Analysis of factorial experiments. https://cran.r-project.org/web/packages/afex/vignettes/assumptions_of_ANOVAs.html
+
 
