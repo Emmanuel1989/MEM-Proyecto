@@ -35,8 +35,11 @@ measures_v2 <- measures_v2[,1:12]
 datos<- measures_v2[sample(nrow(measures_v2), 500, replace = FALSE), ]
 ```
 
+\newpage
+\pagestyle{empty}
+\tableofcontents
 
-## Indice
+\newpage
 
 ## Introducción
 
@@ -50,6 +53,9 @@ Los datos utilizados en este análisis son reales y fueron obtenidos de Kirgiz, 
 Además, se estandarizaron los datos antes de realizar el análisis, lo que significa que se convirtieron todas las variables a la misma escala para que tengan una media de cero y una desviación estándar de uno. Esto se hizo para que las variables se puedan comparar directamente entre sí y para evitar que una variable tenga más peso en el análisis solo porque tiene valores más grandes.
 
 En resumen, este informe utilizará técnicas estadísticas avanzadas para analizar un conjunto de datos complejo y encontrar patrones y relaciones entre las variables del motor síncrono de imán permanente.
+
+\pagebreak
+
 
 ## Análisis descriptivo del conjunto de datos
 
@@ -96,6 +102,7 @@ En esta sección se analizarán los histogramas y boxplot de las variables, para
 ```{r Hist_u_q, echo=F, warning=FALSE}
 hist(datos$u_q, main="Histograma de Tensión en el eje q del motor",ylab = "Frecuencia", xlab = "u_q",  ylim = c(0,80), xlim = c(-10,150))
 ```
+Fig 1: Histograma u_q
 
 **Observaciones:** _podemos observar que no se muestra una curva como una distribución de tipo normal, asemeja más a una distribución de tipo uniforme._
 
@@ -107,6 +114,8 @@ hist(datos$u_q, main="Histograma de Tensión en el eje q del motor",ylab = "Frec
 ```{r Hist_coolant, echo=F, warning=FALSE}
 hist(datos$coolant, main="Histograma de temperatura del refrigerante del motor",ylab = "Frecuencia", xlab = "coolant",  ylim = c(0,250), xlim = c(0,110))
 ```
+Fig 2: Histograma coolant
+
 **Observaciones:** _podemos observar que no se muestra una curva como una distribución de tipo normal, asemeja más a una distribución de tipo exponencial._
 
 
@@ -115,6 +124,7 @@ hist(datos$coolant, main="Histograma de temperatura del refrigerante del motor",
 ```{r Hist_stator_winding, echo=F, warning=FALSE}
 hist(datos$stator_winding, main="Histograma de temperatura del devanado del estator del motor",ylab = "Frecuencia", xlab = "stator_winding", ylim = c(0,70), xlim = c(0,150))
 ```
+Fig 3: Histograma stator_winding
 
 **Observaciones:** _Se observa en la grafica que esta variable podria seguir una distribucion de tipo normal, de cualquier manera se realizaran pruebas de normalidad univariada a fin de observar cual variable sigue una distribucion de tipo normal._
 
@@ -125,7 +135,7 @@ hist(datos$stator_winding, main="Histograma de temperatura del devanado del esta
 ```{r Hist_u_d, echo=F, warning=FALSE}
 hist(datos$u_d, main="Histograma de Tensión en el eje d del motor",ylab = "Frecuencia", xlab = "u_d", ylim = c(0, 140))
 ```
-
+Fig 4: Histograma u_d
 
 **Observaciones:** _Podemos observar que no se muestra una curva como una distribución de tipo normal, se observa solo 2 barras con una gran cantidad de observaciones, se revisara en la sección de **vector de promedios** donde se ubican la media de los datos para esta variable._
 
@@ -136,6 +146,7 @@ hist(datos$u_d, main="Histograma de Tensión en el eje d del motor",ylab = "Frec
 ```{r Hist_stator_tooth, echo=F, warning=FALSE}
 hist(datos$stator_tooth, main="Histograma de temperatura del diente del estator del motor",ylab = "Frecuencia", xlab = "stator_tooth", ylim = c(0,100))
 ```
+Fig 5: Histograma stator_tooth
 
 **Observaciones:** _Podemos observar que esta variable podría seguir una distribución de tipo normal dado los extremos y una forma un poco ligera de campana similar a la normal._
 
@@ -146,6 +157,7 @@ hist(datos$stator_tooth, main="Histograma de temperatura del diente del estator 
 ```{r Hist_motor_speed, echo=F, warning=FALSE}
 hist(datos$motor_speed, main="Histograma de Velocidad del motor",ylab = "Frecuencia", xlab = "motor_speed", xlim = c(0, 6500), ylim = c(0,100))
 ```
+Fig 6: Histograma motor_speed 
 
 
 **Observaciones:** _Podemos observar que no se muestra una curva como una distribución de tipo normal._
@@ -157,6 +169,7 @@ hist(datos$motor_speed, main="Histograma de Velocidad del motor",ylab = "Frecuen
 ```{r Hist_i_d, echo=F, warning=FALSE}
 hist(datos$i_d, main="Histograma de corriente en el eje d del motor",ylab = "Frecuencia", xlab = "i_d")
 ```
+Fig 7: Histograma i_d
 
 **Observaciones:** _Podemos observar que esta variable no sigue una distribución normal , se asemeja más a una distribución de tipo exponencial._
 
@@ -167,7 +180,7 @@ hist(datos$i_d, main="Histograma de corriente en el eje d del motor",ylab = "Fre
 ```{r Hist_i_q, echo=F, warning=FALSE}
 hist(datos$i_q, main="Histograma de corriente en el eje q del motor",ylab = "Frecuencia", xlab = "i_q")
 ```
-
+Fig 8: Histograma i_q
 
 **Observaciones:** _Podemos observar que esta variable no sigue una distribución normal._
 
@@ -179,6 +192,7 @@ hist(datos$i_q, main="Histograma de corriente en el eje q del motor",ylab = "Fre
 ```{r Hist_pm, echo=F, warning=FALSE}
 hist(datos$pm, main="Histograma de temperatura del imán permanente del motor",ylab = "Frecuencia", xlab = "pm", ylim = c(0,120), xlim = c(0,130))
 ```
+Fig 9: Histograma pm
 
 **Observaciones:** _Podemos observar que esta variable no sigue una distribución normal._
 
@@ -189,6 +203,7 @@ hist(datos$pm, main="Histograma de temperatura del imán permanente del motor",y
 ```{r Hist_ambient, echo=F, warning=FALSE}
 hist(datos$ambient, main="Histograma de temperatura ambiente durante la medición",ylab = "Frecuencia", xlab = "ambient")
 ```
+Fig 10: Histograma ambient
 
 **Observaciones:** _Podemos observar que esta variable podría seguir una distribución de tipo normal dado los extremos._
 
@@ -200,6 +215,7 @@ hist(datos$ambient, main="Histograma de temperatura ambiente durante la medició
 ```{r Hist_stator_yoke, echo=F, warning=FALSE}
 hist(datos$stator_yoke, main="Histograma de temperatura del yugo del estator del motor",ylab = "Frecuencia", xlab = "stator_yoke")
 ```
+Fig 11: Histograma stator_yoke
 
 **Observaciones:** _Podemos observar que esta variable podría seguir una distribución de tipo normal dado los extremos._
 
@@ -211,6 +227,8 @@ hist(datos$stator_yoke, main="Histograma de temperatura del yugo del estator del
 ```{r Hist_torque, echo=F, warning=FALSE}
 hist(datos$torque, main="Histograma de par del motor",ylab = "Frecuencia", xlab = "torque")
 ```
+Fig 12: Histograma torque
+
 **Observaciones:** _Podemos observar que esta variable podría seguir una distribución de tipo normal dado los extremos._
 
 
@@ -270,7 +288,7 @@ datos.cor <- round(cor(datos.estd, method = "pearson"), digits = 2)
 corrplot(datos.cor, method = "circle", addCoef.col = "blue", 
          order = "original", type = "upper", number.cex = 0.5, tl.cex = 0.8)
 ```
-
+Fig 13: Plot correlaciones
 
 **Observaciones:** Se observa fuertes correlaciones tanto positivas como negativas. Las correlaciones mas notables mostradas en la gráfica son:
 
@@ -320,6 +338,8 @@ mvn(datos, mvnTest = "royston", univariateTest = "CVM", univariatePlot = "histog
 multivariatePlot = "qq", multivariateOutlierMethod = "adj",
 showOutliers = FALSE, showNewData = FALSE)
 ```
+Fig 14: QQplot
+Fig 15: Outliers
 
 Establecemos las hipótesis a considerar para normal multivariada y univariada.
 
@@ -441,7 +461,7 @@ Creamos nuestra gráfica de codo la cual no sugiere de igual manera elegir entre
 ```{r NumeroFactorePCA, echo=F, warning=F}
 fa.parallel(R, fm = "pa", n.obs = 100, ylabel = "Eigenvalues")
 ```
-
+Fig 16: Gráfica de Codo
 
 
 **Observaciones:** Se puede observar que al elegir 3 factores obtenemos **82%** de la varianza explicada, la cual es un buen porcentaje, Procedemos a usar el algoritmo ahora rotando los ejes usando el método de 'varimax'.
@@ -468,6 +488,7 @@ Representación grafica de cada uno de las variables.
 ```{r PCAGrafFactores, echo=F, warning=F}
 plot(acp_fa, labels = row.names(R))
 ```
+Fig 17: Grafica Factores
 
 **Observaciones:** Se puede observar una agrupación muy notoria en las variables "stator_winding, stator_tooth, pm, stator_yoke, coolant, ambient",  mientras que motor_speed y u_q están cercanas entre ellas, también se observa que las variable torque y u_d están muy cercanas, la única variable que está muy alejada de los grupos antes mencionados es la variable i_d.  
 
