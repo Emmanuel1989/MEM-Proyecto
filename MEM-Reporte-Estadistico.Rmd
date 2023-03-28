@@ -538,13 +538,13 @@ fn_std = function(x){
   return( z)
 }
 df_std_PCA <- apply(df_PCA,2, fn_std)
-head(df_std_PCA)
+head(df_PCA)
 
 ```
 
 De igual manera se validan las dimensiones del dataset con dim().
 
-```{r, echo = FALSE, warning=F}
+```{r, echo = FALSE, warning=F, message=FALSE}
   dim_table <- as.data.frame(t(dim(df_std_PCA)))
   colnames(dim_table) <- c("Filas", "Columnas")
   library(knitr)
@@ -575,6 +575,14 @@ Los números grandes indican que la variable original tiene mucha influencia en 
 El primer componente principal es importante porque explica la mayor parte de la diferencia entre los datos. 
 El doceavo componente principal es el último que se puede hacer con las variables originales. Es el que explica la menor parte de la diferencia entre los datos
 
+Támbien, se calculan los **eigenvalores** como el cuadrado de las desviaciones estándar de las componentes principales, que se encuentran en el objeto pca1$sdev.
+
+```{r, echo = FALSE, warning=F}
+eigenvalues <- pca1$sdev^2
+kable(data.frame(Eigenvalue = eigenvalues), 
+      caption = "Eigenvalores del PCA")
+```
+La interpretación de los eigenvalores es que representan la varianza explicada por cada una de las componentes principales. En este caso, el primer eigenvalor es 4.87, lo que indica que la primera componente principal explica el 48.7% de la varianza total de los datos originales. El segundo eigenvalor es 3.15, lo que representa el 31.5% de la varianza total, y así sucesivamente para cada uno de los eigenvalores.
 
 #### Paso 4: Selección de componentes principales
 
@@ -587,6 +595,21 @@ kable(suma1_table, caption = "Tabla de varianza acumulada explicada por cada com
 num_componentes1 <- length(suma1[suma1 <= 0.82])
 
 
+```
+
+De igual manera, se crea una gráfica de codo utilizando la tabla que muestra la varianza acumulada explicada por cada componente principal. La línea muestra cómo la varianza acumulada explicada aumenta a medida que se incluyen más componentes principales. La línea vertical punteada indica el número de componentes necesarios para alcanzar una varianza acumulada del 82%, como se determinó previamente.
+
+```{r, echo = FALSE, warning=F, message=FALSE}
+library(ggplot2)
+ggplot(suma1_table, aes(x = Componente, y = Varianza_acumulada)) + 
+  geom_line() + 
+  scale_x_continuous(breaks = seq(1, length(suma1), by = 1)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.1)) +
+  geom_vline(xintercept = num_componentes1, linetype = "dashed") +
+  xlab("Número de Componentes") + 
+  ylab("Varianza acumulada explicada") +
+  ggtitle("Gráfico de codo del PCA") +
+  theme_bw()
 ```
 
 \newpage
